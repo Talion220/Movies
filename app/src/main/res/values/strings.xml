@@ -2,4 +2,6 @@
     <string name="app_name">Movies</string>
     <string name="add_movie">Add Movie</string>
     <string name="delete">Delete</string>
+    <string name="date">Release Date (optional)</string>
+    <string name="movie_title">Movie Title</string>
 </resources>

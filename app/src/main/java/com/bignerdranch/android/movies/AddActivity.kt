@@ -1,8 +1,10 @@
 package com.bignerdranch.android.movies
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doOnTextChanged
 
@@ -15,6 +17,15 @@ class AddActivity : AppCompatActivity() {
         val editTextMovieTitle = findViewById<EditText>(R.id.editTextMovieTitle)
         val editTextReleaseDate = findViewById<EditText>(R.id.editTextReleaseDate)
         val buttonAddMovie = findViewById<Button>(R.id.buttonAddMovie)
+
+        // Новая кнопка лупы
+        val buttonSearch = findViewById<ImageButton>(R.id.buttonSearch)
+        buttonSearch.setOnClickListener {
+            //  код для обработки нажатия кнопки лупы
+            // Например, открытие SearchActivity
+            val intent = Intent(this, SearchActivity::class.java)
+            startActivity(intent)
+        }
 
         buttonAddMovie.setOnClickListener {
             // код для добавления фильма в БД
@@ -33,7 +44,7 @@ class AddActivity : AppCompatActivity() {
         }
 
         editTextReleaseDate.doOnTextChanged { text, _, _, _ ->
-            // Ваш код для обработки изменения текста
+            //  код для обработки изменения текста
             // валидация ввода или другие действия
         }
     }

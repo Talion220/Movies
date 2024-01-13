@@ -21,9 +21,12 @@ class AddActivity : AppCompatActivity() {
         // Новая кнопка лупы
         val buttonSearch = findViewById<ImageButton>(R.id.buttonSearch)
         buttonSearch.setOnClickListener {
-            //  код для обработки нажатия кнопки лупы
-            // Например, открытие SearchActivity
             val intent = Intent(this, SearchActivity::class.java)
+            val movieTitle = editTextMovieTitle.text.toString()
+            val releaseDate = editTextReleaseDate.text.toString()
+
+            intent.putExtra("MOVIE_TITLE", movieTitle)
+            intent.putExtra("RELEASE_DATE", releaseDate)
             startActivity(intent)
         }
 

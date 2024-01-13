@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doOnTextChanged
 
@@ -18,16 +19,21 @@ class AddActivity : AppCompatActivity() {
         val editTextReleaseDate = findViewById<EditText>(R.id.editTextReleaseDate)
         val buttonAddMovie = findViewById<Button>(R.id.buttonAddMovie)
 
-        // Новая кнопка лупы
+        // кнопка лупы
         val buttonSearch = findViewById<ImageButton>(R.id.buttonSearch)
         buttonSearch.setOnClickListener {
-            val intent = Intent(this, SearchActivity::class.java)
-            val movieTitle = editTextMovieTitle.text.toString()
-            val releaseDate = editTextReleaseDate.text.toString()
+            val movieTitle = editTextMovieTitle.text.toString().trim()
+            val releaseDate = editTextReleaseDate.text.toString().trim()
 
-            intent.putExtra("MOVIE_TITLE", movieTitle)
-            intent.putExtra("RELEASE_DATE", releaseDate)
-            startActivity(intent)
+            if (movieTitle.isNotEmpty()) {
+                val intent = Intent(this, SearchActivity::class.java)
+                intent.putExtra("MOVIE_TITLE", movieTitle)
+                intent.putExtra("RELEASE_DATE", releaseDate)
+                startActivity(intent)
+            } else {
+                // Показать сообщение об ошибке, если movieTitle пуст
+                Toast.makeText(this, "Введите название фильма", Toast.LENGTH_SHORT).show()
+            }
         }
 
         buttonAddMovie.setOnClickListener {

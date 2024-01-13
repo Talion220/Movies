@@ -1,8 +1,8 @@
 package com.bignerdranch.android.movies
 
 data class Movie(
-    val title: String,
-    val year: String?,
-    val genre: String,
-    val poster: String
+    val Title: String,
+    val Year: String?,
+    val Genre: String,
+    val Poster: String
 )

@@ -33,5 +33,14 @@ class SearchActivity : AppCompatActivity() {
         if (movieTitle != null) {
             viewModel.searchMovies(movieTitle, releaseDate)
         }
+
+        viewModel.movies.observe(this, Observer {
+            // Обработка успешного состояния
+            // Например, выведите данные в консоль
+            it?.forEach { movie ->
+                println("Movie: ${movie.Title}, Year: ${movie.Year}")
+            }
+        })
+
     }
 }

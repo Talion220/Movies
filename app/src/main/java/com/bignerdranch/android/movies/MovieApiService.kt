@@ -9,7 +9,7 @@ interface MovieApiService {
     @GET("/")
     suspend fun searchMovies(
         @Query("apikey") apiKey: String,
-        @Query("t") title: String,
+        @Query("s") title: String,
         @Query("y") year: String?
     ): Response<MovieResponse>
 }

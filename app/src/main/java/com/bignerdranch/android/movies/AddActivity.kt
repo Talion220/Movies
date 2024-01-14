@@ -11,17 +11,30 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doOnTextChanged
+import androidx.room.Room
 import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.Picasso
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class AddActivity : AppCompatActivity() {
+
+    private lateinit var database: AppDatabase
+    private lateinit var imageViewPoster: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add)
 
+        database = Room.databaseBuilder(
+            applicationContext,
+            AppDatabase::class.java, "movie-database"
+        ).build()
+
         val editTextMovieTitle = findViewById<EditText>(R.id.editTextMovieTitle)
         val editTextReleaseDate = findViewById<EditText>(R.id.editTextReleaseDate)
+        imageViewPoster = findViewById(R.id.imageViewPoster)
         val buttonAddMovie = findViewById<Button>(R.id.buttonAddMovie)
 
         val movieTitle = intent.getStringExtra("MOVIE_TITLE")
@@ -47,13 +60,21 @@ class AddActivity : AppCompatActivity() {
         }
 
         buttonAddMovie.setOnClickListener {
-            // код для добавления фильма в БД
             val movieTitle = editTextMovieTitle.text.toString()
             val releaseDate = editTextReleaseDate.text.toString()
 
-            // TODO: Добавить логику для добавления фильма в БД
+            // Получите URL постера из предыдущей активности, например, из Intent
+            val posterUrl = intent.getStringExtra("POSTER_RESULT") ?: "default_poster_url"
 
-            // Закрываем текущую активность
+
+            // Создаем объект MovieEntity
+            val movieEntity = MovieEntity(title = movieTitle, year = releaseDate, posterUrl = posterUrl)
+
+            // Запускаем корутину для вставки данных в базу данных
+            CoroutineScope(Dispatchers.IO).launch {
+                database.movieDao().insert(movieEntity)
+            }
+
             finish()
         }
     }

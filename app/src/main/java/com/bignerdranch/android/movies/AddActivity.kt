@@ -1,7 +1,9 @@
 package com.bignerdranch.android.movies
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
@@ -19,6 +21,14 @@ class AddActivity : AppCompatActivity() {
         val editTextReleaseDate = findViewById<EditText>(R.id.editTextReleaseDate)
         val buttonAddMovie = findViewById<Button>(R.id.buttonAddMovie)
 
+        // Получаем переданные данные из Intent
+        val movieTitle = intent.getStringExtra("MOVIE_TITLE")
+        val releaseDate = intent.getStringExtra("RELEASE_DATE")
+
+        // Устанавливаем значения в EditText
+        editTextMovieTitle.setText(movieTitle)
+        editTextReleaseDate.setText(releaseDate)
+
         // кнопка лупы
         val buttonSearch = findViewById<ImageButton>(R.id.buttonSearch)
         buttonSearch.setOnClickListener {
@@ -29,7 +39,7 @@ class AddActivity : AppCompatActivity() {
                 val intent = Intent(this, SearchActivity::class.java)
                 intent.putExtra("MOVIE_TITLE", movieTitle)
                 intent.putExtra("RELEASE_DATE", releaseDate)
-                startActivity(intent)
+                startActivityForResult(intent, SEARCH_ACTIVITY_REQUEST_CODE)
             } else {
                 // Показать сообщение об ошибке, если movieTitle пуст
                 Toast.makeText(this, "Введите название фильма", Toast.LENGTH_SHORT).show()
@@ -46,15 +56,27 @@ class AddActivity : AppCompatActivity() {
             // Закрываем текущую активность
             finish()
         }
+    }
+    companion object {
+        const val SEARCH_ACTIVITY_REQUEST_CODE = 1
+    }
 
-        editTextMovieTitle.doOnTextChanged { text, _, _, _ ->
-            // код для обработки изменения текста
-            // валидация ввода или другие действия
-        }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
 
-        editTextReleaseDate.doOnTextChanged { text, _, _, _ ->
-            //  код для обработки изменения текста
-            // валидация ввода или другие действия
+        Log.d("SearchActivity", "onActivityResult: requestCode=$requestCode, resultCode=$resultCode")
+
+        if (requestCode == SEARCH_ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            val movieTitleResult = data?.getStringExtra("MOVIE_TITLE_RESULT")
+            val releaseDateResult = data?.getStringExtra("RELEASE_DATE_RESULT")
+
+            Log.d("SearchActivity", "onActivityResult: movieTitleResult=$movieTitleResult, releaseDateResult=$releaseDateResult")
+
+            // Заполните editTextMovieTitle и editTextReleaseDate данными из результата
+            findViewById<EditText>(R.id.editTextMovieTitle).setText(movieTitleResult)
+            findViewById<EditText>(R.id.editTextReleaseDate).setText(releaseDateResult)
         }
     }
+
+
 }

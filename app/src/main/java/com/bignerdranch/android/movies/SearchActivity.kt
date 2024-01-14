@@ -1,5 +1,7 @@
 package com.bignerdranch.android.movies
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -38,9 +40,20 @@ class SearchActivity : AppCompatActivity() {
             // Обработка успешного состояния
             // Например, выведите данные в консоль
             it?.forEach { movie ->
-                println("Movie: ${movie.Title}, Year: ${movie.Year}")
+                println("Movie: ${movie.Title}, Year: ${movie.Year}, Genre: ${movie.Genre}")
             }
         })
+
+        adapter.setOnItemClickListener(object : MovieAdapter.OnItemClickListener {
+            override fun onItemClick(movie: Movie) {
+                val resultIntent = Intent()
+                resultIntent.putExtra("MOVIE_TITLE_RESULT", movie.Title)
+                resultIntent.putExtra("RELEASE_DATE_RESULT", movie.Year)
+                setResult(Activity.RESULT_OK, resultIntent)
+                finish()
+            }
+        })
+
 
     }
 }

@@ -7,11 +7,24 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bignerdranch.android.movies.databinding.ItemMovieBinding
-import com.bumptech.glide.Glide
 import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.Picasso
 
 class MovieAdapter : ListAdapter<Movie, MovieAdapter.ViewHolder>(MovieDiffCallback()) {
+
+    private var onItemClickListener: OnItemClickListener? = null
+
+    fun setOnItemClickListener(listener: OnItemClickListener) {
+        onItemClickListener = listener
+    }
+
+    interface OnItemClickListener {
+        fun onItemClick(movie: Movie) {
+            println("Item Clicked: ${movie.Title}, ${movie.Year}")
+        }
+    }
+
+
     class ViewHolder(private val binding: ItemMovieBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Movie) {
             binding.movie = item
@@ -33,7 +46,12 @@ class MovieAdapter : ListAdapter<Movie, MovieAdapter.ViewHolder>(MovieDiffCallba
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        val movie = getItem(position)
+        holder.bind(movie)
+
+        holder.itemView.setOnClickListener {
+            onItemClickListener?.onItemClick(movie)
+        }
     }
 
 class MovieDiffCallback : DiffUtil.ItemCallback<Movie>() {

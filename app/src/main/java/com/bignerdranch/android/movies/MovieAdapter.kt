@@ -7,11 +7,17 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bignerdranch.android.movies.databinding.ItemMovieBinding
+import com.bumptech.glide.Glide
+import com.squareup.picasso.Picasso
 
 class MovieAdapter : ListAdapter<Movie, MovieAdapter.ViewHolder>(MovieDiffCallback()) {
     class ViewHolder(private val binding: ItemMovieBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Movie) {
             binding.movie = item
+            // Загружаем изображение, если у вашего объекта Movie есть URL постера
+            if (item.Poster != null && item.Poster.isNotEmpty()) {
+                Picasso.get().load(item.Poster).into(binding.moviePoster)
+            }
             binding.executePendingBindings()
         }
     }

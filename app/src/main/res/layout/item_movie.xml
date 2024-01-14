@@ -15,27 +15,40 @@
         android:orientation="vertical"
         android:padding="16dp">
 
+        <ImageView
+            android:id="@+id/moviePoster"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            />
+
         <TextView
             android:id="@+id/movieTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{movie.title}"
             android:textStyle="bold"
-            tools:text="Movie Title" />
+            tools:text="Movie Title"
+            android:gravity="center"
+            android:layout_gravity="center"/>
 
         <TextView
             android:id="@+id/movieYear"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{movie.year}"
-            tools:text="Year" />
+            tools:text="Year"
+            android:gravity="center"
+            android:layout_gravity="center"/>
 
         <TextView
             android:id="@+id/movieGenre"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{movie.genre}"
-            tools:text="Genre" />
+            tools:text="Genre"
+            android:gravity="center"
+            android:layout_gravity="center"/>
 
 
     </LinearLayout>

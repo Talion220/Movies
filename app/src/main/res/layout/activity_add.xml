@@ -46,11 +46,20 @@
         android:imeOptions="actionDone"
         android:maxLines="1"/>
 
+    <ImageView
+        android:id="@+id/imageViewPoster"
+        android:layout_width="300dp"
+        android:layout_height="400dp"
+        android:layout_marginTop="16dp"
+        android:scaleType="centerCrop"
+        android:adjustViewBounds="true"
+        android:layout_gravity="center"/>
+
     <Button
         android:id="@+id/buttonAddMovie"
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="16dp"
-        android:text="Add Movie"/>
+        android:text="Add Movie" />
 </LinearLayout>

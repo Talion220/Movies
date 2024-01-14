@@ -49,6 +49,8 @@ class SearchActivity : AppCompatActivity() {
                 val resultIntent = Intent()
                 resultIntent.putExtra("MOVIE_TITLE_RESULT", movie.Title)
                 resultIntent.putExtra("RELEASE_DATE_RESULT", movie.Year)
+                resultIntent.putExtra("POSTER_RESULT", movie.Poster)
+
                 setResult(Activity.RESULT_OK, resultIntent)
                 finish()
             }

@@ -7,9 +7,12 @@ import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doOnTextChanged
+import com.squareup.picasso.MemoryPolicy
+import com.squareup.picasso.Picasso
 
 class AddActivity : AppCompatActivity() {
 
@@ -21,11 +24,9 @@ class AddActivity : AppCompatActivity() {
         val editTextReleaseDate = findViewById<EditText>(R.id.editTextReleaseDate)
         val buttonAddMovie = findViewById<Button>(R.id.buttonAddMovie)
 
-        // Получаем переданные данные из Intent
         val movieTitle = intent.getStringExtra("MOVIE_TITLE")
         val releaseDate = intent.getStringExtra("RELEASE_DATE")
 
-        // Устанавливаем значения в EditText
         editTextMovieTitle.setText(movieTitle)
         editTextReleaseDate.setText(releaseDate)
 
@@ -41,7 +42,6 @@ class AddActivity : AppCompatActivity() {
                 intent.putExtra("RELEASE_DATE", releaseDate)
                 startActivityForResult(intent, SEARCH_ACTIVITY_REQUEST_CODE)
             } else {
-                // Показать сообщение об ошибке, если movieTitle пуст
                 Toast.makeText(this, "Введите название фильма", Toast.LENGTH_SHORT).show()
             }
         }
@@ -64,17 +64,24 @@ class AddActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        Log.d("SearchActivity", "onActivityResult: requestCode=$requestCode, resultCode=$resultCode")
-
         if (requestCode == SEARCH_ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             val movieTitleResult = data?.getStringExtra("MOVIE_TITLE_RESULT")
             val releaseDateResult = data?.getStringExtra("RELEASE_DATE_RESULT")
+            val posterResult = data?.getStringExtra("POSTER_RESULT")
 
-            Log.d("SearchActivity", "onActivityResult: movieTitleResult=$movieTitleResult, releaseDateResult=$releaseDateResult")
-
-            // Заполните editTextMovieTitle и editTextReleaseDate данными из результата
             findViewById<EditText>(R.id.editTextMovieTitle).setText(movieTitleResult)
             findViewById<EditText>(R.id.editTextReleaseDate).setText(releaseDateResult)
+
+            val posterImageView = findViewById<ImageView>(R.id.imageViewPoster)
+
+            posterResult?.takeIf { it.isNotEmpty() }?.let {
+                Picasso.get()
+                    .load(it)
+                    .memoryPolicy(MemoryPolicy.NO_CACHE)
+                    .placeholder(R.drawable.placeholder)
+                    .error(R.drawable.placeholder)
+                    .into(posterImageView)
+            } ?: posterImageView.setImageResource(R.drawable.placeholder)
         }
     }
 

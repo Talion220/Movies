@@ -1,4 +1,3 @@
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,7 +30,6 @@ class MovieDbAdapter(private var movies: List<MovieEntity>) :
     }
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
         val currentMovie = movies[position]
-        Log.d("MovieDbAdapter", "Movie count: ${movies.size}")
         holder.titleTextView.text = currentMovie.title
         holder.yearTextView.text = currentMovie.year
         Picasso.get()
@@ -39,12 +37,9 @@ class MovieDbAdapter(private var movies: List<MovieEntity>) :
             .placeholder(R.drawable.placeholder)
             .error(R.drawable.placeholder)
             .into(holder.posterImageView)
-        // Дополнительная логика, если необходимо обработать чекбокс
-        //holder.checkBox.isChecked =  логика для установки состояния чекбокса
     }
 
     override fun getItemCount(): Int {
-        Log.d("MovieDbAdapter", "Movie count: ${movies.size}")
         return movies.size
     }
 }

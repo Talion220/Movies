@@ -30,39 +30,32 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Настройка ActionBar с собственным макетом
         supportActionBar?.apply {
             displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
             setCustomView(R.layout.action_bar_layout)
             setDisplayShowCustomEnabled(true)
         }
 
-        // Инициализация базы данных и DAO
         val movieDatabase = AppDatabase.getDatabase(applicationContext)
         movieDao = movieDatabase.movieDao()
 
-        // Получение списка фильмов из базы данных в фоновом режиме
         lifecycleScope.launch {
             val movieList = movieDao.getAllMovies()
 
-            // Настройте RecyclerView и MovieDbAdapter
             val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
             val adapter = MovieDbAdapter(movieList)
             recyclerView.adapter = adapter
             recyclerView.layoutManager = LinearLayoutManager(this@MainActivity)
         }
 
-        // Обработка нажатия на кнопку корзины
         val basketButton = supportActionBar?.customView?.findViewById<ImageButton>(R.id.basketButton)
         basketButton?.setOnClickListener {
             // код для обработки нажатия на кнопку корзины
             Toast.makeText(this, "Кнопка корзины нажата", Toast.LENGTH_SHORT).show()
         }
 
-        // Получение ссылки на FAB
         val fabButton = findViewById<FloatingActionButton>(R.id.fab)
         fabButton.setOnClickListener {
-            // Открытие второй активности (AddActivity) при нажатии на FAB
             val intent = Intent(this, AddActivity::class.java)
             startActivity(intent)
         }

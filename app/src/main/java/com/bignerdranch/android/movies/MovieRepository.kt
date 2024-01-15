@@ -20,16 +20,10 @@ class MovieRepository {
         if (response.isSuccessful) {
             val movies = response.body()?.movies
             if (movies != null) {
-                // Выводим результаты запроса в консоль
-                for (movie in movies) {
-                    println("Title: ${movie.Title}, Year: ${movie.Year}, Genre: ${movie.Genre}, Poster: ${movie.Poster}")
-                }
                 return movies
             }
         }
 
-        // Обработка ошибки (например, вывод в лог или выброс исключения)
-        println("Unsuccessful response. Code: ${response.code()}")
         return emptyList()
     }
 }

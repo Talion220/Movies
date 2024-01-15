@@ -3,7 +3,6 @@ package com.bignerdranch.android.movies
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
@@ -43,7 +42,6 @@ class AddActivity : AppCompatActivity() {
         editTextMovieTitle.setText(movieTitle)
         editTextReleaseDate.setText(releaseDate)
 
-        // кнопка лупы
         val buttonSearch = findViewById<ImageButton>(R.id.buttonSearch)
         buttonSearch.setOnClickListener {
             val movieTitle = editTextMovieTitle.text.toString().trim()
@@ -63,14 +61,10 @@ class AddActivity : AppCompatActivity() {
             val movieTitle = editTextMovieTitle.text.toString()
             val releaseDate = editTextReleaseDate.text.toString()
 
-            // Получите URL постера из предыдущей активности, например, из Intent
             val posterUrl = intent.getStringExtra("POSTER_RESULT") ?: "default_poster_url"
 
-
-            // Создаем объект MovieEntity
             val movieEntity = MovieEntity(title = movieTitle, year = releaseDate, posterUrl = posterUrl)
 
-            // Запускаем корутину для вставки данных в базу данных
             CoroutineScope(Dispatchers.IO).launch {
                 database.movieDao().insert(movieEntity)
             }

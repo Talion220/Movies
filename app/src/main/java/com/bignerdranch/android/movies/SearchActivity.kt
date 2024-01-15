@@ -27,22 +27,12 @@ class SearchActivity : AppCompatActivity() {
             adapter.submitList(it)
         })
 
-        // Получаем переданные данные из Intent
         val movieTitle = intent.getStringExtra("MOVIE_TITLE")
         val releaseDate = intent.getStringExtra("RELEASE_DATE")
 
-        // Вызываем метод searchMovies у viewModel
         if (movieTitle != null) {
             viewModel.searchMovies(movieTitle, releaseDate)
         }
-
-        viewModel.movies.observe(this, Observer {
-            // Обработка успешного состояния
-            // Например, выведите данные в консоль
-            it?.forEach { movie ->
-                println("Movie: ${movie.Title}, Year: ${movie.Year}, Genre: ${movie.Genre}")
-            }
-        })
 
         adapter.setOnItemClickListener(object : MovieAdapter.OnItemClickListener {
             override fun onItemClick(movie: Movie) {

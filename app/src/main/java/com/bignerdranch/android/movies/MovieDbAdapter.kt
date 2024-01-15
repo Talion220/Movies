@@ -12,11 +12,46 @@ import com.squareup.picasso.Picasso
 class MovieDbAdapter(private var movies: List<MovieEntity>) :
     RecyclerView.Adapter<MovieDbAdapter.MovieViewHolder>() {
 
-    class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    private val selectedMovies = HashSet<Long>()
+
+    fun getSelectedMovies(): Set<Long> {
+        return selectedMovies
+    }
+
+    fun clearSelectedMovies() {
+        selectedMovies.clear()
+        notifyDataSetChanged()
+    }
+    fun updateSelectedMovies(selectedMovieId: Long, isChecked: Boolean) {
+        if (isChecked) {
+            selectedMovies.add(selectedMovieId)
+        } else {
+            selectedMovies.remove(selectedMovieId)
+        }
+    }
+
+    fun updateData(newMovies: List<MovieEntity>) {
+        movies = newMovies
+        notifyDataSetChanged()
+    }
+
+
+    inner class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val titleTextView: TextView = itemView.findViewById(R.id.textViewTitle)
         val yearTextView: TextView = itemView.findViewById(R.id.textViewYear)
         val posterImageView: ImageView = itemView.findViewById(R.id.imageViewPoster)
         val checkBox: CheckBox = itemView.findViewById(R.id.checkBox)
+
+        init {
+            checkBox.setOnCheckedChangeListener { _, isChecked ->
+                val movieId = movies[adapterPosition].id
+                if (isChecked) {
+                    selectedMovies.add(movieId)
+                } else {
+                    selectedMovies.remove(movieId)
+                }
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {

@@ -26,6 +26,7 @@ import kotlinx.coroutines.launch
 class MainActivity : AppCompatActivity() {
     private lateinit var movieDao: MovieDao
     private lateinit var adapter: MovieDbAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -43,15 +44,28 @@ class MainActivity : AppCompatActivity() {
             val movieList = movieDao.getAllMovies()
 
             val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
-            val adapter = MovieDbAdapter(movieList)
+            adapter = MovieDbAdapter(movieList)
             recyclerView.adapter = adapter
             recyclerView.layoutManager = LinearLayoutManager(this@MainActivity)
         }
 
         val basketButton = supportActionBar?.customView?.findViewById<ImageButton>(R.id.basketButton)
         basketButton?.setOnClickListener {
-            // код для обработки нажатия на кнопку корзины
-            Toast.makeText(this, "Кнопка корзины нажата", Toast.LENGTH_SHORT).show()
+            val selectedMovies = adapter.getSelectedMovies().toList()
+
+            lifecycleScope.launch {
+                for (movieId in selectedMovies) {
+                    val movie = movieDao.getMovieById(movieId)
+                    movie?.let {
+                        movieDao.deleteMovie(it)
+                    }
+                }
+
+                val updatedMovieList = movieDao.getAllMovies()
+                adapter.updateData(updatedMovieList)
+
+                adapter.clearSelectedMovies()
+            }
         }
 
         val fabButton = findViewById<FloatingActionButton>(R.id.fab)
@@ -61,3 +75,4 @@ class MainActivity : AppCompatActivity() {
         }
     }
 }
+

@@ -3,6 +3,7 @@ package com.bignerdranch.android.movies
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
@@ -21,6 +22,8 @@ class AddActivity : AppCompatActivity() {
 
     private lateinit var database: AppDatabase
     private lateinit var imageViewPoster: ImageView
+    private var posterUrl: String? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,10 +63,8 @@ class AddActivity : AppCompatActivity() {
         buttonAddMovie.setOnClickListener {
             val movieTitle = editTextMovieTitle.text.toString()
             val releaseDate = editTextReleaseDate.text.toString()
-
-            val posterUrl = intent.getStringExtra("POSTER_RESULT") ?: "default_poster_url"
-
-            val movieEntity = MovieEntity(title = movieTitle, year = releaseDate, posterUrl = posterUrl)
+            val currentPosterUrl = posterUrl ?: "default_poster_url"
+            val movieEntity = MovieEntity(title = movieTitle, year = releaseDate, posterUrl = currentPosterUrl)
 
             CoroutineScope(Dispatchers.IO).launch {
                 database.movieDao().insert(movieEntity)
@@ -71,6 +72,7 @@ class AddActivity : AppCompatActivity() {
 
             finish()
         }
+
     }
     companion object {
         const val SEARCH_ACTIVITY_REQUEST_CODE = 1
@@ -88,7 +90,7 @@ class AddActivity : AppCompatActivity() {
             findViewById<EditText>(R.id.editTextReleaseDate).setText(releaseDateResult)
 
             val posterImageView = findViewById<ImageView>(R.id.imageViewPoster)
-
+            Log.d("AddActivity", "Poster URL: $posterResult")
             posterResult?.takeIf { it.isNotEmpty() }?.let {
                 Picasso.get()
                     .load(it)
@@ -96,7 +98,11 @@ class AddActivity : AppCompatActivity() {
                     .placeholder(R.drawable.placeholder)
                     .error(R.drawable.placeholder)
                     .into(posterImageView)
-            } ?: posterImageView.setImageResource(R.drawable.placeholder)
+                posterUrl = it
+            } ?: run {
+                posterImageView.setImageResource(R.drawable.placeholder)
+                posterUrl = null
+            }
         }
     }
 

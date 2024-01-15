@@ -29,7 +29,7 @@ class AddActivity : AppCompatActivity() {
 
         database = Room.databaseBuilder(
             applicationContext,
-            AppDatabase::class.java, "movie-database"
+            AppDatabase::class.java, "movie_database"
         ).build()
 
         val editTextMovieTitle = findViewById<EditText>(R.id.editTextMovieTitle)
